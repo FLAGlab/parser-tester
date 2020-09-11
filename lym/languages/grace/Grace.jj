@@ -1,0 +1,80 @@
+/**
+ * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
+ */options{  static = true;}PARSER_BEGIN(Grace)package languages.grace;
+
+public class Grace{  public static void main(String args []) throws ParseException  {    Grace parser = new Grace(System.in);    while (true)    {      System.out.println("Reading from standard input...");      System.out.print("Enter a Grace expression:");      try      {        Grace.grace_expression();      }      catch (Exception e)      {        System.out.println("NOK.");        System.out.println(e.getMessage());        Grace.ReInit(System.in);      }      catch (Error e)      {        System.out.println("Oops.");        System.out.println(e.getMessage());        break;      }    }  }}PARSER_END(Grace)SKIP :{  " "| "\r"| "\t"| "\n"}TOKEN : /* OPERATORS */{  < UNIFY : "=" >| < ASSIGNMENT : ":=" >| < DEF : "def" >| < VAR : "var" >}TOKEN :{	< WORD : (< LETTER > )+ > 
+|   < CONSTANT : (< DIGIT >)+ >|   < #DIGIT : [ "0"-"9" ] >
+|   < #LETTER : ["a"-"z"] >}
+
+void grace_expression() :
+{ }
+{
+  (    
+	  vars()
+	| block ()
+  )
+  ";"  
+}
+
+void vars() :
+{}
+{
+  (    < DEF > <WORD > <UNIFY > < CONSTANT >
+	| < VAR > <WORD > <ASSIGNMENT > < CONSTANT >
+  )+
+}
+
+void block() :
+{ }
+{
+  (
+	"{"
+	< WORD >
+  	(  	  fun_call()
+  	| annonymous_function()
+  	)
+	"}"
+  )+
+}
+
+void fun_call() :
+{}
+{
+	"."< WORD >
+}
+
+void annonymous_function() :
+{ }
+{
+	"->" expression()
+}
+
+void expression() :
+{}
+{
+  < WORD >
+  (
+    fun_call()
+	| arithmetic_exp()
+  )
+}
+
+void arithmetic_exp() :
+{ }
+{
+	("+" | "-" | "*" | "/") var()
+}
+
+void var() :
+{}
+{
+ 	< WORD > | < CONSTANT >
+}
+
+
+
+
+
+
+
+
