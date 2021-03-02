@@ -17,15 +17,15 @@ public MyParser getMyParser(){
 You are also required to modify the hook method `procesarCadena(String texto)` in the same class
 ```
 if(parsers.get(currentParser).equals("My Parser")){
-	Expressions parserExpressions = getParserExpressions();
-	parserExpressions.ReInit(new java.io.StringReader(texto));
-	try {
-			parserExpressions.one_line(); 
+	MyParser myParser = getMyParser();
+	myParser.ReInit(new java.io.StringReader(texto));
+  try {
+		  myParser.initRule(); 
 		  resp = new String("OK \n");
-	} catch (Exception e) {
+  } catch (Exception e) {
 		  resp = new String ("Error de Sintaxis: "+e.getMessage());
   } catch (Error e) {
 		  resp = new String ("Error Lexico: "+e.getMessage());
-	}
+  }
 }
 ```
