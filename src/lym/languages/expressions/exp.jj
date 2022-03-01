@@ -1,0 +1,44 @@
+/**
+ * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
+ */options{  static = true;}PARSER_BEGIN(exp)package grammar;
+
+public class exp{  public static void main(String args []) throws ParseException  {    exp parser = new exp(System.in);    while (true)    {      System.out.println("Reading from standard input...");      System.out.print("Enter an expression like \"1+(2+3)*4;\" :");      try      {        switch (exp.one_line())        {          case 0 :           System.out.println("OK.");          break;          case 1 :           System.out.println("Goodbye.");          break;          default :           break;        }      }      catch (Exception e)      {        System.out.println("NOK.");        System.out.println(e.getMessage());        exp.ReInit(System.in);      }      catch (Error e)      {        System.out.println("Oops.");        System.out.println(e.getMessage());        break;      }    }  }}PARSER_END(exp)SKIP :{  " "| "\r"| "\t"| "\n"}TOKEN : /* OPERATORS */{  < PLUS : "+" >| < MINUS : "-" >| < MULTIPLY : "*" >| < DIVIDE : "/" >}TOKEN :{  < CONSTANT : (< DIGIT >)+ >| < #DIGIT : [ "0"-"9" ] >}int one_line() :{int res = 0;}{  res = sum() ";"  {
+    System.out.println(res);    return 0;  }| ";"  {    return 1;  }}int sum() :{
+	int left;
+	int right;
+	String op;
+	int res = 0;
+  }{  left = term()  (    (      < PLUS >    | < MINUS >    ) {
+		op = token.image;
+    }    right = term()
+    {
+      	if(op.equals("+"))
+			left =  left + right;
+		else
+			left = left - right;
+    }  )*
+  {
+    return left; 
+   } }int term() :{
+  int left;
+  int right = 0;
+  String op;
+  }{   left = unary() { }  (    (      < MULTIPLY >    | < DIVIDE >    ) {
+		op = token.image;
+    }    right = unary()
+    {
+      if(op.equals("*"))
+      		left = left * right;
+      else
+      	left = left / right;
+    }  )*
+  {	return left;
+  }}int unary() :{ int res; }{  < MINUS > res = element()
+  {		return -1*res;
+  }| res = element()
+{
+  	return res;
+}}int element() :{int res;}{  < CONSTANT >
+  {		int num = Integer.parseInt(token.image);
+		return num;
+  }| "(" res = sum() ")" { return res; }}

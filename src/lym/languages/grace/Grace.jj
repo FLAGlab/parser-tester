@@ -9,72 +9,4 @@ public class Grace{  public static void main(String args []) throws ParseExcep
 void grace_expression() :
 { }
 {
-  (    
-	  vars()
-	| block ()
-  )
-  ";"  
 }
-
-void vars() :
-{}
-{
-  (    < DEF > <WORD > <UNIFY > < CONSTANT >
-	| < VAR > <WORD > <ASSIGNMENT > < CONSTANT >
-  )+
-}
-
-void block() :
-{ }
-{
-  (
-	"{"
-	< WORD >
-  	(  	  fun_call()
-  	| annonymous_function()
-  	)
-	"}"
-  )+
-}
-
-void fun_call() :
-{}
-{
-	"."< WORD >
-}
-
-void annonymous_function() :
-{ }
-{
-	"->" expression()
-}
-
-void expression() :
-{}
-{
-  < WORD >
-  (
-    fun_call()
-	| arithmetic_exp()
-  )
-}
-
-void arithmetic_exp() :
-{ }
-{
-	("+" | "-" | "*" | "/") var()
-}
-
-void var() :
-{}
-{
- 	< WORD > | < CONSTANT >
-}
-
-
-
-
-
-
-
-
