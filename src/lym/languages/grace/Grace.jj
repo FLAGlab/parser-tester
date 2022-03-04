@@ -1,12 +1,39 @@
 /**
  * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
- */options{  static = true;}PARSER_BEGIN(Grace)package languages.grace;
+ */
+/*
+S ⟶ method run {Stmts}
+Stmts ⟶ Stmt Stmts | 𝛌
+Stmt ⟶ var Ident := Exp
+Stmt ⟶ Exp
+Stmt ⟶ while (Exp)Stmt | {Stmts}
+Exp ⟶ Exp + Exp | Exp - Exp | Exp > Exp | Ident := Exp | Ident | Num | print(Exp)
+Ident ⟶ x | y 
+Num ⟶ 0 | 1 | 4 | 3
+*/options{  static = true;}PARSER_BEGIN(Grace)package languages.grace;
 
-public class Grace{  public static void main(String args []) throws ParseException  {    Grace parser = new Grace(System.in);    while (true)    {      System.out.println("Reading from standard input...");      System.out.print("Enter a Grace expression:");      try      {        Grace.grace_expression();      }      catch (Exception e)      {        System.out.println("NOK.");        System.out.println(e.getMessage());        Grace.ReInit(System.in);      }      catch (Error e)      {        System.out.println("Oops.");        System.out.println(e.getMessage());        break;      }    }  }}PARSER_END(Grace)SKIP :{  " "| "\r"| "\t"| "\n"}TOKEN : /* OPERATORS */{  < UNIFY : "=" >| < ASSIGNMENT : ":=" >| < DEF : "def" >| < VAR : "var" >}TOKEN :{	< WORD : (< LETTER > )+ > 
+public class Grace{  public static void main(String args []) throws ParseException  {    Grace parser = new Grace(System.in);    while (true)    {      System.out.println("Reading from standard input...");      System.out.print("Enter a Grace expression:");      try      {        Grace.grace_expression();      }      catch (Exception e)      {        System.out.println("NOK.");        System.out.println(e.getMessage());        Grace.ReInit(System.in);      }      catch (Error e)      {        System.out.println("Oops.");        System.out.println(e.getMessage());        break;      }    }  }}PARSER_END(Grace)SKIP :{  " "| "\r"| "\t"| "\n"}TOKEN : /* OPERATORS */{  < UNIFY : "=" >| < ASSIGNMENT : ":=" >| < DEF : "def" >| < VAR : "var" >
+| <METHOD : "method">
+| < WHILE : "while" >
+|  < PI: "(" >
+|  < PD: ")" >
+| <  PLUS: "+" >
+| < MINUS: "-" >
+|  < GT: " >" >
+|  < PRINT: "print" >}TOKEN :{	< WORD : (< LETTER > )+ > 
 |   < CONSTANT : (< DIGIT >)+ >|   < #DIGIT : [ "0"-"9" ] >
 |   < #LETTER : ["a"-"z"] >}
 
 void grace_expression() :
 { }
 {
+  	< METHOD> < WORD > " { "  " }"
 }
+
+
+
+
+
+
+
+
