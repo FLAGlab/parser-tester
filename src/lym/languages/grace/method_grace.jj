@@ -1,0 +1,74 @@
+/**
+ * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
+ */
+/*
+S ⟶ method run {Stmts}
+Stmts ⟶ Stmt Stmts | 𝛌
+Stmt ⟶ var Ident := Exp
+Stmt ⟶ Exp
+Stmt ⟶ while (Exp)Stmt | {Stmts}
+Exp ⟶ Exp + Exp | Exp - Exp | Exp > Exp | Ident := Exp | Ident | Num | print(Exp)
+Ident ⟶ x | y 
+Num ⟶ 0 | 1 | 4 | 3
+*/options{  static = true;}PARSER_BEGIN(Grace)
+package grammar;
+import java.runtime.*;
+public class Grace{
+    public static void main(String args []) throws ParseException  {    Grace parser = new Grace(System.in);    while (true)    {      System.out.println("Reading from standard input...");      System.out.print("Enter a Grace expression:");      try      {        Grace.grace_expression();      }      catch (Exception e)      {        System.out.println("NOK.");        System.out.println(e.getMessage());        Grace.ReInit(System.in);      }      catch (Error e)      {        System.out.println("Oops.");        System.out.println(e.getMessage());        break;      }    }  }}PARSER_END(Grace)SKIP :{
+  " "|  "\r"| "\t"| "\n"}TOKEN : /* OPERATORS */{  < UNIFY : "=" >| < ASSIGNMENT : ":=" >| < DEF : "def" >| < VAR : "var" >
+| <METHOD : "method">
+| < WHILE : "while" >
+|  < PI: "(" >
+|  < PD: ")" >
+| <  PLUS: "+" >
+|  <  TIMES: "*" >
+| < MINUS: "-" >
+|  < GT: " >" >
+|  < PRINT: "print" >}TOKEN :{	< WORD : (< LETTER > )+ > 
+|   < CONSTANT : (< DIGIT >)+ >|   < #DIGIT : [ "0"-"9" ] >
+|   < #LETTER : ["a"-"z"] >}
+
+void grace_expression() :
+{ }
+{
+  	< METHOD>  < WORD > 
+}
+
+void statement():
+{}
+{
+  (
+    < VAR > <WORD >  <ASSIGNMENT > exp()
+  |  < WHILE > <PI > bool_exp() < PD > (statement() | "{" (statement())+ "}" )
+  |  exp()
+  |  method_call()  )
+}
+
+void bool_exp():
+{}
+{
+	exp() < GT > exp()
+}
+
+void exp():
+{}
+{
+	( < WORD > | < CONSTANT >)
+	(	  (< PLUS > | < MINUS > | < TIMES >) exp()
+)*
+}
+
+void method_call():
+{ }
+{
+	< WORD >(<PI> <PD>)?
+|  < PRINT > <PI > <WORD > <PD >
+}
+  
+
+
+
+
+
+
+
